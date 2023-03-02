@@ -9,20 +9,14 @@ const app = express();
 const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
+const bbqModels = require('./models/bbq.models');
+const userModels = require('./models/user.models');
+const menuModels = require('./models/menu.models');
 app.use(express.json());
 app.use(cors());
 // const path = require('path');
 app.use(express.static('public'));
 
-// const connectDB = async () => {
-//     try {
-//         await mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@sundialcluster.nmgilo7.mongodb.net/?retryWrites=true&w=majority`)
-//         console.log('MongoDB Connected...');
-//     } catch (err) {
-//         console.error(err.message);
-//         process.exit(1);
-//     }
-// }
 
 // const BBQProducts = new mongoose.Schema({
 //     name: String,
@@ -121,18 +115,33 @@ const client = new MongoClient(uri,{ useNewUrlParser: true,useUnifiedTopology: t
 //     // res.status(200).json({ message: 'Files uploaded successfully' });
 // });
 
+// main().catch(err => console.log(err));
 
+// async function main() {
+//     await mongoose.connect(uri);
 
+//     // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
+// }
+
+const connectDB = async () => {
+    try {
+        await mongoose.connect(uri);
+        console.log('MongoDB Connected...');
+    } catch (err) {
+        console.error(err.message);
+        process.exit(1);
+    }
+}
 
 async function run() {
     // connect to the MongoDB cluster
-    const UserList = client.db('SundialDb').collection('UserList');
+    // const UserList = client.db('SundialDb').collection('UserList');
     // const Categories = client.db('ResaleCycle').collection('categories');
-    const BBQProducts = client.db('SundialDb').collection('BBQProducts');
+    // const BBQProducts = client.db('SundialDb').collection('BBQProducts');
     const CartDb = client.db('SundialDb').collection('CartProducts');
     const OrdersDb = client.db('SundialDb').collection('OrdersDb');
     const ImgDb = client.db('SundialDb').collection('ImgDb');
-    const MenuDb = client.db('SundialDb').collection('MenuDb');
+    // const MenuDb = client.db('SundialDb').collection('MenuDb');
     // const AdvertisedProducts = client.db('ResaleCycle').collection('advertised');
     // const Bookings = client.db('ResaleCycle').collection('bookings');
     // const ReportedItems = client.db('ResaleCycle').collection('reportedItems');
@@ -140,27 +149,28 @@ async function run() {
 
 
     // verify admin
-    const verifyAdmin = async (req,res,next) => {
-        const email = req.query.email;
+    // const verifyAdmin = async (req,res,next) => {
+    //     const email = req.query.email;
 
-        const user = await UserList.findOne({ email: email });
-        if (user.role === 'admin') {
+    //     const user = await UserList.findOne({ email: email });
+    //     if (user.role === 'admin') {
 
-            next();
-        } else {
-            return res.status(403).send({ message: 'Forbidden Access' })
-        }
-    }
+    //         next();
+    //     } else {
+    //         return res.status(403).send({ message: 'Forbidden Access' })
+    //     }
+    // }
     try {
         app.post('/users',async (req,res) => {
             const user = req.body;
             const query = { email: user.email }
-            const existUser = await UserList.find(query).toArray();
+            const existUser = await userModels.find(query);
 
             if (existUser.length === 0) {
-                const result = await UserList.insertOne(user);
+                const doc = new userModels(user);
+                const result = await doc.save();
 
-                return res.send(result);
+                return res.status(200).send(result);
                 // console.log(result);
             }
         });
@@ -168,8 +178,15 @@ async function run() {
 
         app.post('/addBBQ',async (req,res) => {
             const product = req.body;
-            const result = await BBQProducts.insertOne(product);
-            return res.send(result);
+            console.log(product);
+            const doc = new bbqModels(product);
+            const result = await doc.save();
+            console.log(result);
+            // const query = { name: product.name }
+            //save to db
+
+            // console.log(result);
+            return res.status(200).send(result);
             // console.log(result);
         });
         app.post('/addToCartDb',async (req,res) => {
@@ -205,8 +222,9 @@ async function run() {
         })
 
         app.get('/AllBBQProducts',async (req,res) => {
-            const BBQproducts = await BBQProducts.find({}).toArray()
-            res.send(BBQproducts)
+            const BBQproducts = await bbqModels.find({})
+            // console.log(BBQproducts);
+            res.status(200).send(BBQproducts)
         })
 
         app.get('/AllBBQProducts/:id',async (req,res) => {
@@ -214,31 +232,46 @@ async function run() {
             console.log(id);
             if (id !== '[object Object]') {
 
-                const BBQproducts = await BBQProducts.findOne({ _id: ObjectId(id) })
+                const BBQproducts = await bbqModels.findOne({ _id: ObjectId(id) })
                 // console.log(BBQproducts);
                 return res.send(BBQproducts)
             }
 
         })
         app.post('/addMenu',async (req,res) => {
-            const menu = req.body;
-            const result = await MenuDb.insertOne(menu);
-            console.log(result);
-            return res.send(result);
+            try {
+                const menu = req.body;
+                const doc = new menuModels(menu);
+                const result = await doc.save();
+                console.log(result);
+                return res.status(200).send(result);
+            } catch (error) {
+                res.status(400).send({ message: error.message });
+            }
+
         });
         app.get('/allMenus',async (req,res) => {
-            const menu = await MenuDb.find({}).toArray();
-            return res.send(menu);
+           
+                const menu = await menuModels.find({});
+                return res.send(menu);
+           
+
         });
         app.get('/menu/:id',async (req,res) => {
-            const id = req.params.id;
-            console.log(id);
-            if (id !== '[object Object]') {
+            try {
+                const id = req.params.id;
+                console.log(id);
+                if (id !== '[object Object]') {
 
-                const menuProduct = await MenuDb.findOne({ _id: ObjectId(id) })
-                // console.log(BBQproducts);
-                return res.send(menuProduct)
+                    const menuProduct = await menuModels.findOne({ _id: ObjectId(id) })
+                    // console.log(BBQproducts);
+                    return res.send(menuProduct)
+                }
+            } catch (error) {
+                console.log(error);
+                res.status(400).send({ message: error.message });
             }
+
 
         })
         app.post('/orderBbq',async (req,res) => {
@@ -296,6 +329,6 @@ run().catch(console.dir);
 
 
 app.listen(port,() => {
-    console.log(`Server is running on port: ${port}`);
-    // connectDB();
+    // console.log(`Server is running on port: ${port}`);
+    connectDB();
 })
