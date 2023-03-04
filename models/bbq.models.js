@@ -10,16 +10,9 @@ const BBQProductsScema = new mongoose.Schema({
             img: String
         },
     ],
-    thumb: String,
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now
-    }
+    thumb: String
+
 
 });
 
-module.exports = BBQProducts = mongoose.model('BBQProducts',BBQProductsScema);
+module.exports = BBQProducts = mongoose.model('BBQProducts',BBQProductsScema,'BBQProducts');

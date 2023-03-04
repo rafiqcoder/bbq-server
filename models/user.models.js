@@ -2,12 +2,14 @@ const mongoose = require('mongoose');
 
 const UserListSchema = new mongoose.Schema({
     name: String,
-    email: String,
-    img: String,
+    email: {
+        type: String,
+        required:[true,'Email is required'],
+        
+    },
     createdAt: {
         type: Date,
         default: Date.now
-
     },
     updatedAt: {
         type: Date,
@@ -15,4 +17,4 @@ const UserListSchema = new mongoose.Schema({
     }
 });
 
-module.exports = UserList = mongoose.model('UserList',UserListSchema);
+module.exports = UserList = mongoose.model('UserList',UserListSchema,'UserList');
