@@ -27,28 +27,41 @@ const is_live = false //true for live, false for sandbox
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@sundialcluster.nmgilo7.mongodb.net/SundialDb?retryWrites=true&w=majority`;
 
+// const client = new MongoClient(uri,{ useNewUrlParser: true,useUnifiedTopology: true,serverApi: ServerApiVersion.v1 });
+
 const connectDB = async () => {
     try {
         await mongoose.connect(uri)
         console.log('MongoDB Connected...');
     } catch (err) {
         console.error(err.message);
-        process.exit(1);
+        // process.exit(1);
     }
 }
 
-app.use('/api/v1/user',userRoute);
-app.use('/api/v1/bbq',bbqRoute);
-app.use('/api/v1/menu',menuRoute);
-app.use('/api/v1/cart',cartRoute);
-app.use('/api/v1/order',orderRoute);
+
+// async function run() {
+    // connect to the MongoDB cluster
+    // const UserList = client.db('SundialDb').collection('UserList');
+    // const Categories = client.db('ResaleCycle').collection('categories');
+    // const BBQProducts = client.db('SundialDb').collection('BBQProducts');
+    // const CartDb = client.db('SundialDb').collection('CartProducts');
+    // const OrdersDb = client.db('SundialDb').collection('OrdersDb');
+    // const ImgDb = client.db('SundialDb').collection('ImgDb');
+    // // const MenuDb = client.db('SundialDb').collection('MenuDb');
+
+    app.use('/api/v1/user',userRoute);
+    app.use('/api/v1/bbq',bbqRoute);
+    app.use('/api/v1/menu',menuRoute);
+    app.use('/api/v1/cart',cartRoute);
+    app.use('/api/v1/order',orderRoute);
 
 
-// app.all('*',(req,res) => {
-//     res.send('No Route Found')
-// })
+    // app.all('*',(req,res) => {
+    //     res.send('No Route Found')
+    // })
 
-
+// } run().catch(console.dir);
 
 
 app.listen(port,() => {
