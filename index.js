@@ -40,7 +40,7 @@ const connectDB = async () => {
 }
 
 
-// async function run() {
+async function run() {
     // connect to the MongoDB cluster
     // const UserList = client.db('SundialDb').collection('UserList');
     // const Categories = client.db('ResaleCycle').collection('categories');
@@ -61,7 +61,7 @@ const connectDB = async () => {
     //     res.send('No Route Found')
     // })
 
-// } run().catch(console.dir);
+} run().catch(console.dir);
 
 
 app.listen(port,() => {
