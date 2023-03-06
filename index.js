@@ -1,14 +1,10 @@
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
 const jwt = require('jsonwebtoken');
-const { MongoClient,ServerApiVersion,ObjectId } = require('mongodb');
 const SSLCommerzPayment = require('sslcommerz-lts')
-const app = express();
-const fs = require('fs');
-const path = require('path');
-const mongoose = require('mongoose');
 const errorHandler = require('./errorHandler.js');
 const dbConnect = require('./utils/dbConnect');
 const userRoute = require('./routes/v1/user.route');
@@ -16,11 +12,12 @@ const bbqRoute = require('./routes/v1/bbq.route');
 const menuRoute = require('./routes/v1/menu.route');
 const cartRoute = require('./routes/v1/cart.route');
 const orderRoute = require('./routes/v1/order.route');
+const app = express();
 
 app.use(express.json());
 app.use(cors());
 // const path = require('path');
-app.use(express.static('public'));
+// app.use(express.static('public'));
 
 
 const store_id = 'webdc5f47477bc4df2'
@@ -47,9 +44,9 @@ app.use('/api/v1/cart',cartRoute);
 app.use('/api/v1/order',orderRoute);
 
 
-app.all('*',(req,res) => {
-    res.send('No Route Found')
-})
+// app.all('*',(req,res) => {
+//     res.send('No Route Found')
+// })
 
 
 
