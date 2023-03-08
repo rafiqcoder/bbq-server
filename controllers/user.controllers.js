@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const userModels = require("../models/user.models");
 
 module.exports.saveUser = async (req,res) => {
@@ -26,6 +27,32 @@ module.exports.getAllUsers = async (req,res) => {
     try {
         const Users = await userModels.find({})
         res.status(200).send(Users)
+    } catch (error) {
+        res.send({ error: error.message });
+    }
+}
+module.exports.deleteUserById = async (req,res) => {
+
+    try {
+        const id = req.params.id;
+        const query = { _id: ObjectId(id) }
+        const result = await userModels.deleteOne(query)
+
+        res.status(200).send(result)
+    } catch (error) {
+        res.send({ error: error.message });
+    }
+}
+module.exports.updateUserById = async (req,res) => {
+
+    try {
+        const email = req.body.email;
+        const userData = req.body;
+        const query = { email: email }
+        const update = { $set: { userData } }
+        const result = await userModels.findOneAndUpdate(query,update)
+
+        res.status(200).send(result)
     } catch (error) {
         res.send({ error: error.message });
     }

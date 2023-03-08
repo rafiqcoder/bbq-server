@@ -6,7 +6,7 @@ const router = express.Router();
 router
     .route('/')
     .get(getAllBbq)
-
+    
     .post(saveBbq)
 router.route('/:id').get(getBbqById)
 router.route('/:id').delete(deleteById)

@@ -12,6 +12,7 @@ const bbqRoute = require('./routes/v1/bbq.route');
 const menuRoute = require('./routes/v1/menu.route');
 const cartRoute = require('./routes/v1/cart.route');
 const orderRoute = require('./routes/v1/order.route');
+const commentRoute = require('./routes/v1/comment.route');
 const app = express();
 
 app.use(express.json());
@@ -51,10 +52,11 @@ async function run() {
     // // const MenuDb = client.db('SundialDb').collection('MenuDb');
 
     app.use('/api/v1/user',userRoute);
-    app.use('/api/v1/bbq',bbqRoute);
+    // app.use('/api/v1/bbq',bbqRoute);
     app.use('/api/v1/menu',menuRoute);
     app.use('/api/v1/cart',cartRoute);
     app.use('/api/v1/order',orderRoute);
+    app.use('/api/v1/comment',commentRoute);
 
 
     // app.all('*',(req,res) => {

@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 
 module.exports.saveOrder = async (req,res) => {
     try {
@@ -5,6 +6,8 @@ module.exports.saveOrder = async (req,res) => {
         // console.log(orderData.cartData.totalPrice);
         // const doc = new OrdersDb(orderData);
         // const result = await doc.save();
+        const status = 'pending';
+        const payment = 'completed';
         const data = {
             total_amount: 100,
             currency: 'BDT',
@@ -42,6 +45,26 @@ module.exports.saveOrder = async (req,res) => {
             res.send({ url: GatewayPageURL })
 
         });
+        // const orderNewData = {
+        //     total_amount: data.total_amount,
+        //     product_name: data.product_name,
+        //     cus_name : data.cus_name
+        //     status:'pending',
+        //     payment:'completed'
+        // } 
+    } catch (error) {
+        res.send({ error: error.message });
+    }
+
+}
+module.exports.updateOrderById = async (req,res) => {
+    try {
+        const id = req.params.id;
+        const data = req.body;
+        const filter = { _id: ObjectId(id) };
+        const update = { $set: { data } };
+        const result = await orderModels.findOneAndUpdate(filter,update)
+        res.status(200).send(result)
     } catch (error) {
         res.send({ error: error.message });
     }

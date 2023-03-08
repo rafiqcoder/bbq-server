@@ -1,9 +1,10 @@
 const express = require('express');
-const { saveOrder } = require('../../controllers/order.controller');
+const { saveOrder,updateOrderById } = require('../../controllers/order.controller');
 
 const router = express.Router();
 
-router 
+router
     .route('/')
     .post(saveOrder)
-module.exports = router;
+router.route('/:id').patch(updateOrderById)
+module.exports = router; 
