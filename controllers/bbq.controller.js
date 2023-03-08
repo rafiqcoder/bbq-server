@@ -1,15 +1,15 @@
 const { ObjectId } = require("mongodb");
 const errorHandler = require("../errorHandler");
-// const bbqModels = require("../models/bbq.models");
+const bbqModels = require("../models/bbq.models");
 const dbConnect = require("../utils/dbConnect");
-const client = dbConnect();
+// const client = dbConnect();
 
-const bbqModels = client.db('SundialDb').collection('BBQProducts');
+// const bbqModels = client.db('SundialDb').collection('BBQProducts');
 
 
 module.exports.getAllBbq = async (req,res) => {
     try {
-        const BBQproducts = await bbqModels.find({}).toArray();
+        const BBQproducts = await bbqModels.find({})
         // console.log('BBQproducts',BBQproducts);
         res.status(200).json(BBQproducts)
     } catch (error) {

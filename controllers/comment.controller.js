@@ -3,9 +3,9 @@ const express = require('express');
 const commentModels = require('../models/comment.models');
 const dbConnect = require('../utils/dbConnect');
 const router = express.Router();
-const client = dbConnect();
+// const client = dbConnect();
 
-const comment = client.db('SundialDb').collection('reviews');
+// const comment = client.db('SundialDb').collection('reviews');
 
 
 module.exports.saveComment = async (req,res) => {
@@ -23,7 +23,7 @@ module.exports.getComments = async (req,res) => {
     try {
         const id = req.params.id;
         console.log(id);
-        const getComments = await comment.find({ productId: id }).toArray();
+        const getComments = await commentModels.find({ productId: id })
         console.log(getComments);
         res.status(200).json(getComments);
     } catch (error) {
