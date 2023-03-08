@@ -50,8 +50,8 @@ async function run() {
     // const OrdersDb = client.db('SundialDb').collection('OrdersDb');
     // const ImgDb = client.db('SundialDb').collection('ImgDb');
     // // const MenuDb = client.db('SundialDb').collection('MenuDb');
-    app.use('/api/v1/jwt',jwtRoute)
     app.use('/api/v1/user',userRoute);
+    app.use('/api/v1/jwt',jwtRoute)
     app.use('/api/v1/bbq',bbqRoute);
     app.use('/api/v1/menu',menuRoute);
     app.use('/api/v1/cart',cartRoute);

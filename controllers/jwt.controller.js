@@ -1,14 +1,20 @@
+const jwt = require('jsonwebtoken');
+const userModels = require('../models/user.models');
 
 module.exports.getJwt = async (req,res,next) => {
 
     try {
         const email = req.query.email;
-        console.log(email);
+        const query = { email: email }
+        const findUser = await userModels.findOne(query);
+        if (!findUser) {
+            return res.status(400).send({ error: 'User not found' });
+        }
+        const token = jwt.sign({ email },process.env.ACCESS_SECRET_TOKEN,{ expiresIn: '7d' });
         
-        const token = jwt.sign(user,process.env.ACCESS_SECRET_TOKEN);
-        console.log(token);
-        return res.status(200).send(token);
+        return res.status(200).send({token: token});
     } catch (error) {
+        console.log(error);
         res.send({ error: error.message });
     }
 
