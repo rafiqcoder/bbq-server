@@ -4,9 +4,10 @@ const UserListSchema = new mongoose.Schema({
     name: String,
     email: {
         type: String,
-        required:[true,'Email is required'],
-        
+        required: [true,'Email is required'],
+
     },
+    admin: Boolean,
     createdAt: {
         type: Date,
         default: Date.now

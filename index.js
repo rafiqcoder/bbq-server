@@ -14,6 +14,7 @@ const cartRoute = require('./routes/v1/cart.route');
 const orderRoute = require('./routes/v1/order.route');
 const commentRoute = require('./routes/v1/comment.route');
 const jwtRoute = require('./routes/v1/jwt.route');
+const isAdming = require('./routes/v1/admin.route');
 const { MongoClient,ServerApiVersion } = require('mongodb');
 const app = express();
 
@@ -52,6 +53,7 @@ async function run() {
     // // const MenuDb = client.db('SundialDb').collection('MenuDb');
     app.use('/api/v1/user',userRoute);
     app.use('/api/v1/jwt',jwtRoute)
+    app.use('/api/v1/admin',isAdming)
     app.use('/api/v1/bbq',bbqRoute);
     app.use('/api/v1/menu',menuRoute);
     app.use('/api/v1/cart',cartRoute);
