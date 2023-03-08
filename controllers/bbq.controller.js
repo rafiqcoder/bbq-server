@@ -11,7 +11,7 @@ module.exports.getAllBbq = async (req,res) => {
     try {
         const BBQproducts = await bbqModels.find({}).toArray();
         // console.log('BBQproducts',BBQproducts);
-        res.status(200).send(BBQproducts)
+        res.status(200).json(BBQproducts)
     } catch (error) {
         res.send({ error: error.message });
     }
