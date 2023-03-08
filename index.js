@@ -32,19 +32,11 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@sundial
 // mongoose.connect(uri);
 
 
-// mongoose.connect(uri)
-//     .then(() => console.log('MongoDB Connected...'))
-//     .catch(err => console.log(err))
+mongoose.connect(uri)
+    .then(() => console.log('MongoDB Connected...'))
+    .catch(err => console.log(err))
 
-const connectDB = async () => {
-    try {
-        await mongoose.connect(uri);
-        console.log('Database connected...');
-    } catch (error) {
-        console.log(error.message);
-        setTimeout(connectDB,5000);
-    }
-};
+
 
 // export default connectDB;
 
@@ -74,5 +66,5 @@ async function run() {
 
 app.listen(port,async () => {
     // console.log(`Server is running on port: ${port}`);
-    await connectDB();
+    // await connectDB();
 })
