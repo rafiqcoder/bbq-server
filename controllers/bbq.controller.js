@@ -1,10 +1,15 @@
 const { ObjectId } = require("mongodb");
 const errorHandler = require("../errorHandler");
-const bbqModels = require("../models/bbq.models");
+// const bbqModels = require("../models/bbq.models");
+const dbConnect = require("../utils/dbConnect");
+const client = dbConnect();
+
+const bbqModels = client.db('SundialDb').collection('BBQProducts');
+
 
 module.exports.getAllBbq = async (req,res) => {
     try {
-        const BBQproducts = await bbqModels.find({})
+        const BBQproducts = await bbqModels.find({}).toArray();
         // console.log('BBQproducts',BBQproducts);
         res.status(200).send(BBQproducts)
     } catch (error) {
@@ -61,8 +66,8 @@ module.exports.updateById = async (req,res) => {
         const id = req.params.id;
         const product = req.body;
         const filter = { _id: ObjectId(id) }
-        
-        const update ={$set:product}
+
+        const update = { $set: product }
         if (id !== '[object Object]') {
 
             const BBQproducts = await bbqModels.findOneAndUpdate(filter,update)
