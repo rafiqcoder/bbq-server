@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const commentScema = new mongoose.Schema({
-    productId: String,
     name: String,
+    productId: String,
     email: String,
     img: String,
     comment: String,

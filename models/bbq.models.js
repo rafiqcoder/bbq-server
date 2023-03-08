@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const BBQProductsScema = new mongoose.Schema({
+    productId: String,
     name: String,
     price: Number,
     description: String,
