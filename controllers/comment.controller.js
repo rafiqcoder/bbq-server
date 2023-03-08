@@ -3,6 +3,7 @@ const express = require('express');
 const commentModels = require('../models/comment.models');
 const dbConnect = require('../utils/dbConnect');
 const router = express.Router();
+
 // const client = dbConnect();
 
 // const comment = client.db('SundialDb').collection('reviews');
@@ -10,7 +11,6 @@ const router = express.Router();
 
 module.exports.saveComment = async (req,res) => {
     const comment = req.body;
-    console.log(comment);
     const newComment = new commentModels(comment)
     try {
         const saveComment = await newComment.save();

@@ -13,6 +13,7 @@ const menuRoute = require('./routes/v1/menu.route');
 const cartRoute = require('./routes/v1/cart.route');
 const orderRoute = require('./routes/v1/order.route');
 const commentRoute = require('./routes/v1/comment.route');
+const jwtRoute = require('./routes/v1/jwt.route');
 const { MongoClient,ServerApiVersion } = require('mongodb');
 const app = express();
 
@@ -31,11 +32,21 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@sundial
 // mongoose.connect(uri);
 
 
-mongoose.connect(uri)
-    .then(() => console.log('MongoDB Connected...'))
-    .catch(err => console.log(err));
+// mongoose.connect(uri)
+//     .then(() => console.log('MongoDB Connected...'))
+//     .catch(err => console.log(err))
 
+const connectDB = async () => {
+    try {
+        await mongoose.connect(uri);
+        console.log('Database connected...');
+    } catch (error) {
+        console.log(error.message);
+        setTimeout(connectDB,5000);
+    }
+};
 
+// export default connectDB;
 
 async function run() {
 
@@ -47,7 +58,7 @@ async function run() {
     // const OrdersDb = client.db('SundialDb').collection('OrdersDb');
     // const ImgDb = client.db('SundialDb').collection('ImgDb');
     // // const MenuDb = client.db('SundialDb').collection('MenuDb');
-
+    app.use('/api/v1/jwt',jwtRoute)
     app.use('/api/v1/user',userRoute);
     app.use('/api/v1/bbq',bbqRoute);
     app.use('/api/v1/menu',menuRoute);
@@ -63,5 +74,5 @@ async function run() {
 
 app.listen(port,async () => {
     // console.log(`Server is running on port: ${port}`);
-    // await connectDB();
+    await connectDB();
 })
