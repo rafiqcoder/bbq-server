@@ -42,6 +42,7 @@ module.exports.saveOrder = async (req,res) => {
         sslcz.init(data).then(apiResponse => {
             // Redirect the user to payment gateway
             let GatewayPageURL = apiResponse.GatewayPageURL
+            console.log('GatewayPageURL',GatewayPageURL);
             res.send({ url: GatewayPageURL })
 
         });
@@ -61,6 +62,8 @@ module.exports.saveOrder = async (req,res) => {
         }
         const doc = new orderModels(orderNewData);
         const result = await doc.save();
+        console.log(result);
+        res.status(200).send(result)
     } catch (error) {
         res.send({ error: error.message });
     }
