@@ -15,6 +15,7 @@ const orderRoute = require('./routes/v1/order.route');
 const commentRoute = require('./routes/v1/comment.route');
 const jwtRoute = require('./routes/v1/jwt.route');
 const isAdming = require('./routes/v1/admin.route');
+const emailRoute = require('./routes/v1/email.route');
 const { MongoClient,ServerApiVersion } = require('mongodb');
 const app = express();
 
@@ -51,6 +52,8 @@ async function run() {
     // const OrdersDb = client.db('SundialDb').collection('OrdersDb');
     // const ImgDb = client.db('SundialDb').collection('ImgDb');
     // // const MenuDb = client.db('SundialDb').collection('MenuDb');
+
+    app.use('/api/v1/email',emailRoute);
     app.use('/api/v1/user',userRoute);
     app.use('/api/v1/jwt',jwtRoute)
     app.use('/api/v1/admin',isAdming)
