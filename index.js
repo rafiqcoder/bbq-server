@@ -25,9 +25,6 @@ app.use(cors());
 // app.use(express.static('public'));
 
 
-const store_id = 'webdc5f47477bc4df2'
-const store_passwd = 'webdc5f47477bc4df2@ssl'
-const is_live = false //true for live, false for sandbox
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@sundialcluster.nmgilo7.mongodb.net/SundialDb?retryWrites=true&w=majority`;
 // dbConnect()
 // const mongoose = require('mongoose');

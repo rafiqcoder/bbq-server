@@ -10,7 +10,7 @@ module.exports.veryfyJwt = (req,res,next) => {
             console.log(err);
             return res.status(403).json({ error: 'Forbidden' });
         }
-            
+
         // console.log(user);
         req.user = user;
         // console.log(user);
