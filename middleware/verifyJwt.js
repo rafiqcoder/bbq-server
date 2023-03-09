@@ -4,9 +4,14 @@ module.exports.veryfyJwt = (req,res,next) => {
     // console.log(authorization);
     // console.log(authHeader);
     const token = authorization && authorization.split(' ')[1];
-    if (token == null) return res.status(401).json({ error: 'Unauthorized' });
+    if (token === null) return res.status(401).json({ error: 'Unauthorized' });
     jwt.verify(token,process.env.ACCESS_SECRET_TOKEN,(err,user) => {
-        if (err) return res.status(403).json({ error: 'Forbidden' });
+        if (err) {
+            console.log(err);
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+            
+        // console.log(user);
         req.user = user;
         // console.log(user);
         next();

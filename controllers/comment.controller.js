@@ -21,6 +21,16 @@ module.exports.saveComment = async (req,res) => {
 }
 module.exports.getComments = async (req,res) => {
     try {
+
+        const getComments = await commentModels.find({})
+        console.log(getComments);
+        res.status(200).json(getComments);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
+module.exports.getCommentsById = async (req,res) => {
+    try {
         const id = req.params.id;
         console.log(id);
         const getComments = await commentModels.find({ productId: id })

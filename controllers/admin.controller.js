@@ -15,9 +15,9 @@ module.exports.isAdmin = async (req,res,next) => {
         const findUser = await userModels.findOne(query);
         // console.log(findUser);
         if (findUser) {
-            console.log(findUser);
+            
             if (findUser.admin) {
-                console.log('admin');
+                
                 return res.status(200).send({ admin: true })
             } else {
                 return
