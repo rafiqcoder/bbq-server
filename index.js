@@ -20,7 +20,7 @@ const emailRoute = require('./routes/v1/email.route');
 const { MongoClient,ServerApiVersion } = require('mongodb');
 const app = express();
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'https://bbq.netlify.app',
     credentials: true
 }));
 app.use(cookieParser());
