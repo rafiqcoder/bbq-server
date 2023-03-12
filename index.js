@@ -1,6 +1,7 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const app = express();
 const mongoose = require('mongoose');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
@@ -18,13 +19,12 @@ const jwtRoute = require('./routes/v1/jwt.route');
 const isAdming = require('./routes/v1/admin.route');
 const emailRoute = require('./routes/v1/email.route');
 const { MongoClient,ServerApiVersion } = require('mongodb');
-const app = express();
 app.use(cors({
-    origin: 'https://bbq.netlify.app',
+    origin: 'https://bbq.netlify.app'
     credentials: true
 }));
-app.use(cookieParser());
 app.use(express.json());
+app.use(cookieParser());
 // const path = require('path');
 // app.use(express.static('public'));
 
