@@ -1,4 +1,5 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -18,9 +19,12 @@ const isAdming = require('./routes/v1/admin.route');
 const emailRoute = require('./routes/v1/email.route');
 const { MongoClient,ServerApiVersion } = require('mongodb');
 const app = express();
-
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+}));
+app.use(cookieParser());
 app.use(express.json());
-app.use(cors());
 // const path = require('path');
 // app.use(express.static('public'));
 

@@ -3,22 +3,39 @@ const userModels = require('../models/user.models');
 
 
 module.exports.isAdmin = async (req,res,next) => {
+    // console.log(req.headers);
     try {
         const email = req.query.email;
         const user = req.user;
+        console.log('user',email);
+        const accessToken = req.accessToken ? req.accessToken : null;
+        console.log('accessToken',accessToken);
         // console.log(user);
         if (email !== user.email) {
-            return res.status(400).send({ error: 'User not found' });
+            return res.status(404).json({
+                logout: true,
+                error: 'user not found'
+
+            });
         }
         const query = { email: email }
-        
+
         const findUser = await userModels.findOne(query);
         // console.log(findUser);
         if (findUser) {
-            
+
             if (findUser.admin) {
-                
-                return res.status(200).send({ admin: true })
+                if (accessToken !== null) {
+
+                    return res.status(200).send({
+                        admin: true,
+                        accessToken: accessToken,
+                    })
+                } else {
+                    return res.status(200).send({
+                        admin: true,
+                    })
+                }
             } else {
                 return
             }
