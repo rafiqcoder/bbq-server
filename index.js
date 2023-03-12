@@ -19,10 +19,7 @@ const isAdming = require('./routes/v1/admin.route');
 const emailRoute = require('./routes/v1/email.route');
 const { MongoClient,ServerApiVersion } = require('mongodb');
 const app = express();
-app.use(cors({
-
-    credentials: true
-}));
+app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 // const path = require('path');
