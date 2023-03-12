@@ -20,7 +20,7 @@ const isAdming = require('./routes/v1/admin.route');
 const emailRoute = require('./routes/v1/email.route');
 const { MongoClient,ServerApiVersion } = require('mongodb');
 app.use(cors({
-    origin: 'https://barbeque-tonight-wgmr.vercel.app',
+    origin: 'https://bbq.netlify.app',
     credentials: true
 }));
 app.use(express.json());
