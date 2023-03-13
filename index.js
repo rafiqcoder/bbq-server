@@ -6,7 +6,12 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const port = process.env.PORT || 5000;
 const app = express();
-app.use(cors());
+app.use(cors(
+    {
+        origin: 'https://bbq.netlify.app',
+        credentials: true
+    }
+));
 app.use(express.json());
 const SSLCommerzPayment = require('sslcommerz-lts')
 const errorHandler = require('./errorHandler.js');
