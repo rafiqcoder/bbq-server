@@ -22,7 +22,7 @@ module.exports.veryfyJwt = async (req,res,next) => {
 
                             });
                         }
-                        // const accessToken = jwt.sign({ email: user.email },process.env.ACCESS_SECRET_TOKEN,{ expiresIn: '15s' });
+                        const accessToken = jwt.sign({ email: user.email },process.env.ACCESS_SECRET_TOKEN,{ expiresIn: '15s' });
 
 
                         req.accessToken = accessToken;
