@@ -1,26 +1,28 @@
 const { ObjectId } = require("mongodb");
-
+const express = require('express');
+const app = express();
 
 // const SslCommerzPayment = require('sslcommerz-lts')
+const SSLCommerzPayment = require('sslcommerz-lts')
 const orderModels = require("../models/order.models");
 const transId = require("../utils/transId");
-
+const cors = require('cors');
+app.use(cors());
 // const store_id = 'webdc5f47477bc4df2'
 // const store_passwd = ''
 // const is_live = false //true for live, false for sandbox
-const SSLCommerzPayment = require('sslcommerz-lts')
 const store_id = 'webdc5f47477bc4df2'
 const store_passwd = 'webdc5f47477bc4df2@ssl'
-const is_live = false 
-    
+const is_live = false
+
 module.exports.saveOrder = async (req,res) => {
     try {
         const orderData = req.body;
 
-        console.log(orderData.cartData.totalPrice);
+        // console.log(orderData.cartData);
         const cusName = orderData.firstName + ' ' + orderData.lastName;
         const traId = transId(10);
-        console.log(traId);
+        // console.log(traId);
         const data = {
             total_amount: 100,
             currency: 'BDT',
@@ -57,7 +59,9 @@ module.exports.saveOrder = async (req,res) => {
             let GatewayPageURL = apiResponse.GatewayPageURL
             res.redirect(GatewayPageURL)
             console.log('Redirecting to: ',GatewayPageURL)
-        });
+        }).catch(error => {
+            console.log(error)
+        })
         const orderNewData = {
             total_amount: data.total_amount,
             products: orderData.cartData,
@@ -72,10 +76,10 @@ module.exports.saveOrder = async (req,res) => {
             payment: 'completed',
             shipping_method: data.shipping_method,
         }
-        const doc = new orderModels(orderNewData);
-        const result = await doc.save();
-        console.log(result);
-        res.status(200).send(result)
+        // const doc = new orderModels(orderNewData);
+        // const result = await doc.save();
+        // console.log(result);
+        // res.status(200).send(result)
     } catch (error) {
         res.send({ error: error.message });
     }

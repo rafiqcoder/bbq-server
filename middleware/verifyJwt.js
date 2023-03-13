@@ -6,7 +6,7 @@ module.exports.veryfyJwt = async (req,res,next) => {
         // console.log(authorization);
         // console.log(authHeader);
         // console.log('rea',req)
-        console.log('refreshToken',refreshToken);
+        // console.log('refreshToken',refreshToken);
         const token = authorization && authorization.split(' ')[1];
         if (token === null) return res.status(401).json({ error: 'Unauthorized' });
         jwt.verify(token,process.env.ACCESS_SECRET_TOKEN,(err,user) => {
@@ -22,7 +22,7 @@ module.exports.veryfyJwt = async (req,res,next) => {
 
                             });
                         }
-                        const accessToken = jwt.sign({ email: user.email },process.env.ACCESS_SECRET_TOKEN,{ expiresIn: '15s' });
+                        // const accessToken = jwt.sign({ email: user.email },process.env.ACCESS_SECRET_TOKEN,{ expiresIn: '15s' });
 
 
                         req.accessToken = accessToken;

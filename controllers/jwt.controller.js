@@ -14,7 +14,7 @@ module.exports.getJwt = async (req,res,next) => {
         const token = jwt.sign({ email },process.env.ACCESS_SECRET_TOKEN,{ expiresIn: '15s' });
         const refreshToken = jwt.sign({ email },process.env.ACCESS_REFRESH_TOKEN,{ expiresIn: '7d' });
 
-        console.log(refreshToken);
+        // console.log(refreshToken);
         res.cookie('refreshToken',refreshToken,{
             httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000
