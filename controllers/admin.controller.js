@@ -27,12 +27,12 @@ module.exports.isAdmin = async (req,res,next) => {
             if (findUser.admin) {
                 if (accessToken !== null) {
 
-                    return res.status(200).send({
+                    return res.status(200).json({
                         admin: true,
                         accessToken: accessToken,
                     })
                 } else {
-                    return res.status(200).send({
+                    return res.status(200).json({
                         admin: true,
                     })
                 }
