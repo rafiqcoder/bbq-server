@@ -7,7 +7,7 @@ module.exports.isAdmin = async (req,res,next) => {
     try {
         const email = req.query.email;
         const user = req.user;
-        console.log('user',email);
+        console.log('user',user);
         const accessToken = req.accessToken ? req.accessToken : null;
         console.log('accessToken',accessToken);
         // console.log(user);
