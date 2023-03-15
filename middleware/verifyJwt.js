@@ -18,7 +18,7 @@ module.exports.veryfyJwt = async (req,res,next) => {
                     if (err) {
                         return res.status(403).json({
                             logout: true,
-                            error: 'session Expired',
+                            error: err,
                             message: 'Please login again',
 
                         });
