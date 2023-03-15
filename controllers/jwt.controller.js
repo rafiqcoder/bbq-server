@@ -15,11 +15,13 @@ module.exports.getJwt = async (req,res,next) => {
         const refreshToken = jwt.sign({ email },process.env.ACCESS_REFRESH_TOKEN,{ expiresIn: '7d' });
 
         // console.log(refreshToken);
-        res.cookie('refreshToken',refreshToken,{
-            httpOnly: true,
-            maxAge: 24 * 60 * 60 * 1000,
-            secure: true
-        })
+        const result = await userModels.findOneAndUpdate(query,{ refreshToken: refreshToken });
+        console.log(result);
+        // res.cookie('refreshToken',refreshToken,{
+        //     httpOnly: true,
+        //     maxAge: 24 * 60 * 60 * 1000,
+        //     secure: true
+        // })
         return res.status(200).json({ token });
     } catch (error) {
         console.log(error);
