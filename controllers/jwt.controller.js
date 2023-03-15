@@ -17,8 +17,8 @@ module.exports.getJwt = async (req,res,next) => {
         // console.log(refreshToken);
         res.cookie('refreshToken',refreshToken,{
             httpOnly: true,
-            maxAge: 24 * 60 * 60 * 1000
-            // secure: true
+            maxAge: 24 * 60 * 60 * 1000,
+            secure: true
         })
         return res.status(200).json({ token });
     } catch (error) {

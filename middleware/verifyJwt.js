@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken');
 module.exports.veryfyJwt = async (req,res,next) => {
     try {
         const { authorization } = req.headers;
-        const { refreshToken } = req.cookies;
+        const { refreshToken } = req.headers.cookie;
+        // console.log(req);
         // console.log(authorization);
         // console.log(authHeader);
         // console.log('rea',req)
@@ -11,28 +12,27 @@ module.exports.veryfyJwt = async (req,res,next) => {
         if (token === null) return res.status(401).json({ error: 'Unauthorized' });
         jwt.verify(token,process.env.ACCESS_SECRET_TOKEN,(err,user) => {
             if (err) {
-                return res.status(403).json({'unauthorized': 'true'})
-                
-                    // jwt.verify(refreshToken,process.env.ACCESS_REFRESH_TOKEN,(err,user) => {
-                    //     if (err) {
-                    //         return res.status(403).json({
-                    //             logout: true,
-                    //             error: 'session Expired',
-                    //             message: 'Please login again',
+                res.status(403).json({ 'unauthorized': 'true' })
 
-                    //         });
-                    //     }
-                    //     const accessToken = jwt.sign({ email: user.email },process.env.ACCESS_SECRET_TOKEN,{ expiresIn: '15s' });
+                jwt.verify(refreshToken,process.env.ACCESS_REFRESH_TOKEN,(err,user) => {
+                    if (err) {
+                        return res.status(403).json({
+                            logout: true,
+                            error: 'session Expired',
+                            message: 'Please login again',
 
-
-                    //     req.accessToken = accessToken;
-                    //     req.user = user;
-                    //  next();
+                        });
+                    }
+                    const accessToken = jwt.sign({ email: user.email },process.env.ACCESS_SECRET_TOKEN,{ expiresIn: '15s' });
 
 
-                    // })
+                    req.accessToken = accessToken;
+                    req.user = user;
+                    next();
 
-                
+
+                })
+
             } else {
                 req.user = user;
                 next();
