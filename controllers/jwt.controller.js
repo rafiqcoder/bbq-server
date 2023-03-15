@@ -11,7 +11,7 @@ module.exports.getJwt = async (req,res,next) => {
         if (!findUser) {
             return res.status(400).send({ error: 'User not found' });
         }
-        const token = jwt.sign({ email },process.env.ACCESS_SECRET_TOKEN,{ expiresIn: '7d' });
+        const token = jwt.sign({ email },process.env.ACCESS_SECRET_TOKEN,{ expiresIn: '15s' });
         const refreshToken = jwt.sign({ email },process.env.ACCESS_REFRESH_TOKEN,{ expiresIn: '7d' });
 
         // console.log(refreshToken);
