@@ -8,6 +8,7 @@ const UserListSchema = new mongoose.Schema({
 
     },
     admin: Boolean,
+    refreshToken: String,
     createdAt: {
         type: Date,
         default: Date.now
