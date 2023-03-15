@@ -9,7 +9,7 @@ module.exports.veryfyJwt = async (req,res,next) => {
         // console.log('rea',req)
         const token = authorization && authorization.split(' ')[1];
         if (token === null) return res.status(401).json({ error: 'Unauthorized' });
-        jwt.verify(token,process.env.ACCESS_SECRET_TOKEN,(err,user) => {
+        jwt.verify(token,process.env.ACCESS_SECRET_TOKEN,async (err,user) => {
             if (err) {
                 // res.status(403).json({ error: 'unauthorized true' })
                 const foundUser = await userModels.findOne({ email: user.email });
