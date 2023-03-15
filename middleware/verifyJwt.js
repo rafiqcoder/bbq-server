@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 module.exports.veryfyJwt = async (req,res,next) => {
     try {
         const { authorization } = req.headers;
-        const { refreshToken } = req.headers.cookie;
+        const { refreshToken } = req.cookies;
         // console.log(req);
         // console.log(authorization);
         // console.log(authHeader);
