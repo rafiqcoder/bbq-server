@@ -12,7 +12,7 @@ module.exports.veryfyJwt = async (req,res,next) => {
         if (token === null) return res.status(401).json({ error: 'Unauthorized' });
         jwt.verify(token,process.env.ACCESS_SECRET_TOKEN,(err,user) => {
             if (err) {
-                res.status(403).json({ 'unauthorized': 'true' })
+                res.status(403).json({ error: 'unauthorized true' })
 
                 jwt.verify(refreshToken,process.env.ACCESS_REFRESH_TOKEN,(err,user) => {
                     if (err) {
