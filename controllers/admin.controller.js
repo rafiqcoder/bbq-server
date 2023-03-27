@@ -15,7 +15,7 @@ module.exports.isAdmin = async (req,res,next) => {
             return res.status(404).json({
                 logout: true,
                 error: 'user not found'
-
+                
             });
         }
         const query = { email: email }
