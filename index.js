@@ -9,14 +9,15 @@ const app = express();
 app.use(express.json());
 app.use(cors(
     {
-        // origin: 'http://localhost:3000',
-        origin: 'https://bbq.netlify.app',
+        origin: 'http://localhost:3000',
+        // origin: 'https://bbq.netlify.app',
         credentials: true
     }
 ));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-const SSLCommerzPayment = require('sslcommerz-lts')
+// const SSLCommerzPayment = require('sslcommerz-lts')
+const SSLCommerz = require('sslcommerz-nodejs');
 const errorHandler = require('./errorHandler.js');
 const dbConnect = require('./utils/dbConnect');
 const userRoute = require('./routes/v1/user.route');
@@ -26,20 +27,23 @@ const cartRoute = require('./routes/v1/cart.route');
 const orderRoute = require('./routes/v1/order.route');
 const commentRoute = require('./routes/v1/comment.route');
 const jwtRoute = require('./routes/v1/jwt.route');
-const isAdming = require('./routes/v1/admin.route');
+const isAdmin = require('./routes/v1/admin.route');
 const emailRoute = require('./routes/v1/email.route');
 const { MongoClient,ServerApiVersion } = require('mongodb');
+
 // app.use(cookieParser());
 // const path = require('path');
 // app.use(express.static('public'));
-const store_id = 'webdc5f47477bc4df2'
-const store_passwd = 'webdc5f47477bc4df2@ssl'
-const is_live = false
+// const store_id = 'webdc5f47477bc4df2'
+// const store_passwd = 'webdc5f47477bc4df2@ssl'
+// const is_live = false
+const sslcommerz = new SSLCommerz({
+    store_id: 'sundi64220b1ee2bcb',
+    store_password: 'sundi64220b1ee2bcb@ssl',
+    is_sandbox: true // set to true for sandbox mode
+});
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@sundialcluster.nmgilo7.mongodb.net/SundialDb?retryWrites=true&w=majority`;
-// dbConnect()
-// const mongoose = require('mongoose');
-// mongoose.connect(uri);
 
 
 mongoose.connect(uri)
@@ -52,19 +56,10 @@ mongoose.connect(uri)
 
 async function run() {
 
-    // connect to the MongoDB cluster
-    // const UserList = client.db('SundialDb').collection('UserList');
-    // const Categories = client.db('ResaleCycle').collection('categories');
-    // const BBQProducts = client.db('SundialDb').collection('BBQProducts');
-    // const CartDb = client.db('SundialDb').collection('CartProducts');
-    // const OrdersDb = client.db('SundialDb').collection('OrdersDb');
-    // const ImgDb = client.db('SundialDb').collection('ImgDb');
-    // // const MenuDb = client.db('SundialDb').collection('MenuDb');
-
     app.use('/api/v1/email',emailRoute);
     app.use('/api/v1/user',userRoute);
     app.use('/api/v1/jwt',jwtRoute)
-    app.use('/api/v1/admin',isAdming)
+    app.use('/api/v1/admin',isAdmin)
     app.use('/api/v1/bbq',bbqRoute);
     app.use('/api/v1/menu',menuRoute);
     app.use('/api/v1/cart',cartRoute);
@@ -72,70 +67,38 @@ async function run() {
     app.use('/api/v1/comment',commentRoute);
     app.post('/api/v1/payment',async (req,res) => {
         try {
-            const orderData = req.body;
-
-            // console.log(orderData.cartData);
-            const cusName = orderData.firstName + ' ' + orderData.lastName;
-            const traId = transId(10);
-            // console.log(traId);
-            const data = {
+            sslcommerz.init_transaction({
                 total_amount: 100,
                 currency: 'BDT',
-                tran_id: 'REF123', // use unique tran_id for each api call
-                success_url: 'http://localhost:3030/success',
-                fail_url: 'http://localhost:3030/fail',
-                cancel_url: 'http://localhost:3030/cancel',
-                ipn_url: 'http://localhost:3030/ipn',
-                shipping_method: 'Courier',
-                product_name: 'Computer.',
-                product_category: 'Electronic',
-                product_profile: 'general',
-                cus_name: 'Customer Name',
-                cus_email: 'customer@example.com',
-                cus_add1: 'Dhaka',
-                cus_add2: 'Dhaka',
-                cus_city: 'Dhaka',
-                cus_state: 'Dhaka',
-                cus_postcode: '1000',
-                cus_country: 'Bangladesh',
-                cus_phone: '01711111111',
-                cus_fax: '01711111111',
-                ship_name: 'Customer Name',
-                ship_add1: 'Dhaka',
-                ship_add2: 'Dhaka',
-                ship_city: 'Dhaka',
-                ship_state: 'Dhaka',
-                ship_postcode: 1000,
-                ship_country: 'Bangladesh',
-            };
-            const sslcz = new SSLCommerzPayment(store_id,store_passwd,is_live)
-            sslcz.init(data).then(apiResponse => {
-                // Redirect the user to payment gateway
-                let GatewayPageURL = apiResponse.GatewayPageURL
-                res.redirect(GatewayPageURL)
-                console.log('Redirecting to: ',GatewayPageURL)
-            }).catch(error => {
-                console.log(error)
-            })
-            const orderNewData = {
-                total_amount: data.total_amount,
-                products: orderData.cartData,
-                product_name: data.product_name,
-                cus_name: data.cus_name,
-                cus_email: data.cus_email,
-                ship_address: data.ship_add1,
-                cus_postcode: data.cus_postcode,
-                cus_phone: data.cus_phone,
-                tran_id: data.tran_id,
-                status: 'pending',
-                payment: 'completed',
-                shipping_method: data.shipping_method,
-            }
+                tran_id: 'your_transaction_id',
+                success_url: 'http://localhost:3000/success',
+                fail_url: 'http://localhost:3000/fail',
+                cancel_url: 'http://localhost:3000/cancel',
+                emi_option: 0
+            },(response) => {
+                console.log(response);
+                // redirect to SSLCommerz checkout page
+            });
+            // const orderNewData = {
+            //     total_amount: data.total_amount,
+            //     products: orderData.cartData,
+            //     product_name: data.product_name,
+            //     cus_name: data.cus_name,
+            //     cus_email: data.cus_email,
+            //     ship_address: data.ship_add1,
+            //     cus_postcode: data.cus_postcode,
+            //     cus_phone: data.cus_phone,
+            //     tran_id: data.tran_id,
+            //     status: 'pending',
+            //     payment: 'completed',
+            //     shipping_method: data.shipping_method,
+            // }
             // const doc = new orderModels(orderNewData);
             // const result = await doc.save();
             // console.log(result);
             // res.status(200).send(result)
         } catch (error) {
+            console.log(error);
             res.send({ error: error.message });
         }
 

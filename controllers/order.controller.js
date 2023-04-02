@@ -15,20 +15,21 @@ const store_id = 'sundi64220b1ee2bcb'
 const store_passwd = 'sundi64220b1ee2bcb@ssl'
 const is_live = false
 
-module.exports.saveOrder = async (req,res) => {
+module.exports.saveOrder = async (req,res,next) => {
     try {
-        const orderData = req.body;
-
-        // console.log(orderData.cartData);
+        const orderData = req.body.cart;
+        const grandTotal = req.body.grandTotal;
+        // console.log(orderData);
         const cusName = orderData.firstName + ' ' + orderData.lastName;
         const traId = transId(10);
         // console.log(traId);
-        const config = {
+        console.log('orderData',grandTotal);
+        const data = {
             store_id: 'sundi64220b1ee2bcb',
             store_passwd: 'sundi64220b1ee2bcb@ssl',
-            total_amount: '10.00',
+            total_amount: grandTotal,
             currency: 'BDT',
-            tran_id: 'your_transaction_id',
+            tran_id: 'TRE45',
             success_url: 'https://your_website.com/success',
             fail_url: 'https://your_website.com/fail',
             cancel_url: 'https://your_website.com/cancel',
@@ -38,34 +39,38 @@ module.exports.saveOrder = async (req,res) => {
             product_category: 'Test category',
             product_profile: 'general'
         };
-        const sslcz = new SSLCommerzPayment(store_id,store_passwd,is_live)
-        sslcommerz.initPayment(config,function (err,response) {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            console.log(response.GatewayPageURL);
-            res.redirect(response.GatewayPageURL)
-        });
-        // const orderNewData = {
-        //     total_amount: data.total_amount,
-        //     products: orderData.cartData,
-        //     product_name: data.product_name,
-        //     cus_name: data.cus_name,
-        //     cus_email: data.cus_email,
-        //     ship_address: data.ship_add1,
-        //     cus_postcode: data.cus_postcode,
-        //     cus_phone: data.cus_phone,
-        //     tran_id: data.tran_id,
-        //     status: 'pending',
-        //     payment: 'completed',
-        //     shipping_method: data.shipping_method,
-        // }
+        // const sslcz = new SSLCommerzPayment(store_id,store_passwd,is_live)
+        // sslcz.initPayment(config,function (err,response) {
+        //     if (err) {
+        //         console.log(err);
+        //         return;
+        //     }
+        //     console.log(response.GatewayPageURL);
+        //     res.redirect(response.GatewayPageURL)
+        // });
+        const orderNewData = {
+            total_amount: grandTotal,
+            products: orderData,
+            product_name: data.product_name,
+            cus_name: data.cus_name,
+            cus_email: data.cus_email,
+            ship_address: data.ship_add1,
+            cus_postcode: data.cus_postcode,
+            cus_phone: data.cus_phone,
+            tran_id: data.tran_id,
+            status: 'pending',
+            payment: 'completed',
+            shipping_method: data.shipping_method,
+        }
+        // console.log('orderNewData',orderNewData);
+        req.data = orderNewData;
         // const doc = new orderModels(orderNewData);
         // const result = await doc.save();
         // console.log(result);
         // res.status(200).send(result)
+        next();
     } catch (error) {
+        console.log(error);
         res.send({ error: error.message });
     }
 
