@@ -9,8 +9,8 @@ const app = express();
 app.use(express.json());
 app.use(cors(
     {
-        origin: 'http://localhost:3000',
-        // origin: 'https://bbq.netlify.app',
+        // origin: 'http://localhost:300
+        origin: 'https://bbq.netlify.ap
         credentials: true
     }
 ));
