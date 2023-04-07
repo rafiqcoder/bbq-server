@@ -68,30 +68,30 @@ async function run() {
     app.use('/api/v1/order',orderRoute);
     app.use('/api/v1/comment',commentRoute);
     //get all bbq
-    app.post('/api/v1/ssl-payment-success',async (req,res) => {
+    // app.post('/api/v1/ssl-payment-success',async (req,res) => {
         
-        const data = req.body
-        console.log(data);
-        res.send({
-            data: data.tran_id,
-            status: 'success'
-        })
-    })
-    app.post('/api/v1/ssl-payment-failure',async (req,res) => {
-        return res.status(400).json({
-            data: req.body,
-        })
-    })
-    app.post('/api/v1/ssl-payment-cancel',async (req,res) => {
-        return res.status(200).json({
-            data: req.body,
-        })
-    })
-    app.post('/api/v1/ssl-payment-ipn',async (req,res) => {
-        return res.status(200).json({
-            data: req.body,
-        })
-    })
+    //     const data = req.body
+    //     console.log(data);
+    //     res.send({
+    //         data: data.tran_id,
+    //         status: 'success'
+    //     })
+    // })
+    // app.post('/api/v1/ssl-payment-failure',async (req,res) => {
+    //     return res.status(400).json({
+    //         data: req.body,
+    //     })
+    // })
+    // app.post('/api/v1/ssl-payment-cancel',async (req,res) => {
+    //     return res.status(200).json({
+    //         data: req.body,
+    //     })
+    // })
+    // app.post('/api/v1/ssl-payment-ipn',async (req,res) => {
+    //     return res.status(200).json({
+    //         data: req.body,
+    //     })
+    // })
     // app.all('*',(req,res) => {
     //     res.send('No Route Found')
     // })
