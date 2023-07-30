@@ -19,7 +19,7 @@ module.exports.saveOrder = async (req,res,next) => {
 
         const { products: orderData,grandTotal,userData } = req.body
         // const grandTotal = req.body.grandTotal;
-        console.log(userData);
+        // console.log(userData);
         if (userData !== null || userData !== undefined) {
             const cusName = userData?.firstName + ' ' + userData?.lastName;
             const traId = transId(10);
@@ -68,6 +68,7 @@ module.exports.saveOrder = async (req,res,next) => {
                 if (apiResponse?.GatewayPageURL) {
 
                     const saveOrder = newOrder.save();
+                    console.log('saveOrder',saveOrder);
 
                     res.send({
                         url: GatewayPageURL,
