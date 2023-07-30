@@ -31,7 +31,7 @@ const isAdmin = require('./routes/v1/admin.route');
 const emailRoute = require('./routes/v1/email.route');
 const { MongoClient,ServerApiVersion } = require('mongodb');
 const SSLCommerzPayment = require('sslcommerz-lts');
-const SslCommerzPayment = require('sslcommerz-lts/api/payment-controller.js');
+// const SslCommerzPayment = require('sslcommerz-lts/api/payment-controller.js');
 
 // app.use(cookieParser());
 // const path = require('path');
@@ -66,6 +66,7 @@ async function run() {
     app.use('/api/v1/menu',menuRoute);
     app.use('/api/v1/cart',cartRoute);
     app.use('/api/v1/order',orderRoute);
+    app.use('/api/v1/ssl-payment-success',orderRoute);
     app.use('/api/v1/comment',commentRoute);
     //get all bbq
     // app.post('/api/v1/ssl-payment-success',async (req,res) => {

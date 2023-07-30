@@ -19,75 +19,81 @@ module.exports.saveOrder = async (req,res,next) => {
 
         const { products: orderData,grandTotal,userData } = req.body
         // const grandTotal = req.body.grandTotal;
-        // console.log(orderData);
-        const cusName = userData.firstName + ' ' + userData.lastName;
-        const traId = transId(10);
-        // console.log(traId);
-        console.log('grandTotal',grandTotal);
-        // console.log('userData',userData);
-        const data = {
-            store_id: 'sundi64220b1ee2bcb',
-            store_passwd: 'sundi64220b1ee2bcb@ssl',
-            total_amount: grandTotal,
-            currency: 'BDT',
-            cus_name: cusName,
-            ship_address: userData.address,
-            cus_phone: userData.phone,
-            cus_email: userData.email,
-            tran_id: traId,
-            success_url: 'http://localhost:5000/api/v1/ssl-payment-success',
-            fail_url: 'http://localhost:5000/api/v1/ssl-payment-failure',
-            cancel_url: 'http://localhost:5000/api/v1/ssl-payment-cancel',
-            ipn_url: 'http://localhost:5000/api/v1/ssl-payment-ipn',
-            shipping_method: 'NO',
-            product_name: 'Test product',
-            product_category: 'Test category',
-            product_profile: 'general'
-        };
-        const orderNewData = {
-            total_amount: grandTotal,
-            products: orderData,
-            product_name: data.product_name,
-            cus_name: cusName,
-            cus_email: data.cus_email,
-            ship_address: data.ship_address,
-            cus_phone: data.cus_phone,
-            tran_id: data.tran_id,
-            status: 'pending',
-            payment: 'completed',
-            shipping_method: data.shipping_method,
-        }
-        const sslcz = new SSLCommerzPayment(store_id,store_passwd,is_live)
-
-        sslcz.init(data).then(apiResponse => {
-            // Redirect the user to payment gateway
-            const { GatewayPageURL } = apiResponse;
-            // resUrl = apiResponse.GatewayPageURL
-            // console.log('apiResponse',apiResponse);
-            if (apiResponse?.GatewayPageURL) {
-                // console.log('Redirecting to: ',GatewayPageURL)
-                // console.log(apiResponse);
-                res.send({ url: GatewayPageURL })
+        console.log(userData);
+        if (userData !== null || userData !== undefined) {
+            const cusName = userData?.firstName + ' ' + userData?.lastName;
+            const traId = transId(10);
+            // console.log(traId);
+            console.log('grandTotal',grandTotal);
+            // console.log('userData',userData);
+            const data = {
+                store_id: 'sundi64220b1ee2bcb',
+                store_passwd: 'sundi64220b1ee2bcb@ssl',
+                total_amount: grandTotal,
+                currency: 'BDT',
+                cus_name: cusName,
+                ship_address: userData?.address,
+                cus_phone: userData?.phone,
+                cus_email: userData?.email,
+                tran_id: traId,
+                success_url: `http://localhost:3000/payment-success?tran_id=${traId}`,
+                fail_url: 'http://localhost:3000/api/v1/ssl-payment-failure',
+                cancel_url: 'http://localhost:3000/api/v1/payment-cancel',
+                ipn_url: 'http://localhost:3000/api/v1/ssl-payment-ipn',
+                shipping_method: 'NO',
+                product_name: 'Test product',
+                product_category: 'Test category',
+                product_profile: 'general'
+            };
+            const orderNewData = {
+                total_amount: grandTotal,
+                products: orderData,
+                cus_name: cusName,
+                cus_email: data?.cus_email,
+                ship_address: data?.ship_address,
+                cus_phone: data?.cus_phone,
+                tran_id: data?.tran_id,
+                status: 'pending',
+                cus_postcode: '1234',
+                payment: 'unpaid',
+                shipping_method: data?.shipping_method,
             }
-            //sslcommerz validation 
+            const newOrder = new orderModels(orderNewData);
+            const sslcz = new SSLCommerzPayment(store_id,store_passwd,is_live)
+
+            sslcz.init(data).then(apiResponse => {
+
+                const { GatewayPageURL } = apiResponse;
+
+                if (apiResponse?.GatewayPageURL) {
+
+                    const saveOrder = newOrder.save();
+
+                    res.send({
+                        url: GatewayPageURL,
+                        data: orderNewData
+                    })
+                }
+            })
 
 
 
-            // console.log('orderNewData',orderNewData);
+                //sslcommerz validation 
 
-            // const doc = new orderModels(orderNewData);
-            // const result = await doc.save();
-            // console.log(result);
-            // res.status(200).send(result)
 
-        })
-            .catch(err => console.log("err",err))
-        // 
-        //    res.send({ resUrl });
 
-        // res.send({ url: "https://sandbox.sslcommerz.com/EasyCheckOut/testcde3a69cfc9258f869dd3d3fca406b34736"})
+                // console.log('orderNewData',orderNewData);
 
-        req.data = orderNewData;
+                // const doc = new orderModels(orderNewData);
+                // const result = await doc.save();
+                // console.log(result);
+                // res.status(200).send(result)
+
+
+                .catch(err => console.log("err",err))
+            req.data = orderNewData;
+        }
+
         // next();
 
 

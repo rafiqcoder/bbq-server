@@ -5,9 +5,9 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    products: Array,
     tran_id: String,
     shipping_method: String,
-    products: Array,
     cus_name: String,
     cus_email: String,
     ship_address: String,
