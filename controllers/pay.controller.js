@@ -2,7 +2,6 @@ const orderModels = require("../models/order.models");
 
 module.exports.PaySuccess = async (req,res) => {
     try {
-         
         const id = req.params.transId;
         // console.log(id);
         const data = req.body;

@@ -5,6 +5,7 @@ const SSLCommerzPayment = require('sslcommerz-lts')
 const orderModels = require("../models/order.models");
 const transId = require("../utils/transId");
 const cors = require('cors');
+const { Base_url } = require("../utils/utils");
 app.use(cors());
 // const store_id = 'webdc5f47477bc4df2'
 // const store_passwd = ''
@@ -36,10 +37,10 @@ module.exports.saveOrder = async (req,res,next) => {
                 cus_phone: userData?.phone,
                 cus_email: userData?.email,
                 tran_id: traId,
-                success_url: `http://localhost:3000/payment-success?tran_id=${traId}`,
-                fail_url: 'http://localhost:3000/api/v1/ssl-payment-failure',
-                cancel_url: 'http://localhost:3000/api/v1/payment-cancel',
-                ipn_url: 'http://localhost:3000/api/v1/ssl-payment-ipn',
+                success_url: `${Base_url}/payment-success?tran_id=${traId}`,
+                fail_url: `${Base_url}/payment-success?tran_id=${traId}`,
+                cancel_url: `${Base_url}/api/v1/payment-cancel?tran_id=${traId}`,
+                ipn_url: `${ Base_url }/api/v1/ssl-payment-ipn?tran_id=${traId}`,
                 shipping_method: 'NO',
                 product_name: 'Test product',
                 product_category: 'Test category',

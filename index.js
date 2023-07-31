@@ -7,10 +7,10 @@ const jwt = require('jsonwebtoken');
 const port = process.env.PORT || 5000;
 const app = express();
 app.use(express.json());
+const { Base_url } = require('./utils/utils.js');
 app.use(cors(
     {
-        // origin: 'http://localhost:3000',
-        origin: 'https://bbq.netlify.app',
+        origin: Base_url,
         credentials: true
     }
 ));
@@ -31,7 +31,9 @@ const isAdmin = require('./routes/v1/admin.route');
 const emailRoute = require('./routes/v1/email.route');
 const successRoute = require('./routes/v1/paySuccess.route');
 const emptyCart = require('./routes/v1/emptyCart.route');
+
 const { MongoClient,ServerApiVersion } = require('mongodb');
+
 const SSLCommerzPayment = require('sslcommerz-lts');
 
 // const SslCommerzPayment = require('sslcommerz-lts/api/payment-controller.js');
