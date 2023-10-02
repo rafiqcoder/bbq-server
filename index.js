@@ -7,10 +7,12 @@ const jwt = require('jsonwebtoken');
 const port = process.env.PORT || 5000;
 const app = express();
 app.use(express.json());
+
+const { Base_url } = require('./utils/utils.js');
 app.use(cors(
     {
-        // origin: 'http://localhost:3000',
-        origin: 'https://bbq.netlify.app',
+        origin: Base_url,
+        // origin: 'https://bbq.netlify.app',
         credentials: true
     }
 ));
